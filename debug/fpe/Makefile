@@ -3,14 +3,13 @@ CC = gcc
 CFLAGS = -g -Wall -DTRAPFPE 
 LDFLAGS = -lm
 LD = $(CC)
-INC = -I/home/alumno/Escritorio/WTPC/HOdebug-profile/debug/fpe/fpe_x87_sse
+FPE_DIR = ./fpe_x87_sse
+INC = -I$(FPE_DIR)
 
-FPE_DIR = /home/alumno/Escritorio/WTPC/HOdebug-profile/debug/fpe/fpe_x87_sse
 SOURCE_C = $(wildcard *.c)
+SOURCE_FPE = $(wildcard $(FPE_DIR)/*.c)
 OBJECTS_C = $(patsubst %.c, %_c.o, $(SOURCE_C))
-
-OBJECTS_FPE = $(patsubst $(FPE_DIR)/%.c, %_c.o, $(SOURCE_C))
-
+OBJECTS_FPE = $(patsubst %.c, %_c.o, $(SOURCE_FPE))
 EXECUTABLES = $(patsubst %.c, %.e, $(SOURCE_C))
 
 default: all
@@ -18,25 +17,21 @@ default: all
 help:
 	@echo "\
   make all:           make every executable (default)\n\
+  make objects:           make every object\n\
   make clean:         delete output files\n\
   make help:          display this help"
 
-objects: $(OBJECTS_C)
-
-objects_fpe: $(OBJECTS_FPE)
+objects: $(OBJECTS_C) $(OBJECTS_FPE)
 
 executable: $(EXECUTABLES)
 
-all: objects objects_fpe executable
+all: objects executable
 
-%_c.o: %.c
+%_c.o: %.c 
 	$(CC) $(INC) $(CFLAGS) -c $^ -o $@ 
 
-$(FPE_DIR)/%_c.o : $(FPE_DIR)/%.c
-	$(CC) $(CFLAGS) -c $^ -o $@
-
-%.e: %_c.o
+%.e: $(OBJECTS_FPE) %_c.o
 	$(LD) $^ -o $@ $(LDFLAGS) 
 
 clean:
-	rm -rfv $(OBJECTS_C) $(EXECUTABLES)
+	rm -rfv $(OBJECTS_C) $(OBJECTS_FPE) $(EXECUTABLES)

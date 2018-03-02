@@ -25,13 +25,13 @@ int main(int argc, char *argv[])
   
   printf("Comparing with 2...");
 
-  if (tmp > 2.) {
+  if (tmp > 2) {
     c = +1.;
   } else {
     c = -1.;
   }
 
-  printf("Done!");
+  printf("Done!\n");
   printf("c = %f \n", c);
   
   return(EXIT_SUCCESS);

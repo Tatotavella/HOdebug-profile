@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
   }
 
   printf("Done!\n");
-  printf("c = %f \n", tmp);
-  
+  //printf("c = %f \n", tmp);
+  printf("c = %f \n", c);
+
   return(EXIT_SUCCESS);
 }
